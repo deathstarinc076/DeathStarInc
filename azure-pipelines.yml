@@ -33,8 +33,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: '6f57203c-a898-41eb-95c4-07c7edf4c29c'
-    appName: 'deathstarinc'
-    package: $(System.DefaultWorkingDirectory)/**/*.zip    
+- task: DotNetCoreCLI@2
+ inputs:
+   command: 'publish'
+   publishWebProjects: true
+   zipAfterPublish: true
+   arguments: '--output $(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+ inputs:
+   pathToPublish: $(Build.ArtifactStagingDirectory)
+   artifactName: AspNetCoreExample
